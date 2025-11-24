@@ -5,13 +5,13 @@
 
 #import <Foundation/Foundation.h>
 @implementation Fmp4PlayerLib {
-  NativeFmp4Player *nativeFmp4Module;
+  NativeFmp4PlayerLib *nativeFmp4Module;
 }
-RCT_EXPORT_MODULE(Fmp4PlayerLib)
+RCT_EXPORT_MODULE(NativeFmp4PlayerLib)
 
 - (instancetype)init {
   if (self = [super init]) {
-    nativeFmp4Module = [[NativeFmp4Player alloc] init];  // Initialize in init method
+    nativeFmp4Module = [[NativeFmp4PlayerLib alloc] init];  // Initialize in init method
   }
   return self;
 }
@@ -29,7 +29,11 @@ RCT_EXPORT_MODULE(Fmp4PlayerLib)
 }
 
 - (void)startStreaming { 
-  [nativeFmp4Module startStreaming];
+  if (@available(iOS 16.0, *)) {
+    [nativeFmp4Module startStreaming];
+  } else {
+    // Fallback on earlier versions
+  }
 }
 
 - (void)stopStreaming { 

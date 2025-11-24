@@ -8,10 +8,9 @@
 import Foundation
 
 import AVFoundation
-import GCDWebServer
-
+import Swifter
 @objcMembers
-class NativeFmp4Player: NSObject {
+public class NativeFmp4PlayerLib: NSObject {
   public static var streamId : String?
   private var url : URL?
   private var socketSession : URLSession?
@@ -21,7 +20,7 @@ class NativeFmp4Player: NSObject {
   private var LastPushSegmentTime = CACurrentMediaTime()
   private var FileURL : URL?
   private var playerItem: AVPlayerItem?
-  private var proxyServer : GCDWebServer?
+  private var proxyServer : HttpServer?
   private let tmpDir = FileManager.default.temporaryDirectory
   private var hlsDir : URL
   private var segmentCount = 0
@@ -30,23 +29,24 @@ class NativeFmp4Player: NSObject {
   private var SegmentBuffer : [Data]
   private var initSegment : Data?
   
-  
-  override init() {
+  @objc
+  public override init() {
     self.socketSession = nil
     self.socketTask = nil
     self.hlsDir = tmpDir.appendingPathComponent("hls")
-    self.proxyServer = GCDWebServer()
+    self.proxyServer = HttpServer()
     self.SegmentBuffer = []
     super.init()
   }
   
   @available(iOS 16.0, *)
-  func startStreaming() {
-    proxyServer?.addGETHandler(forBasePath: "/", directoryPath: hlsDir.path(), indexFilename: nil, cacheAge: 0, allowRangeRequests: true)
+  public func startStreaming() {
+    //proxyServer?.addGETHandler(forBasePath: "/", directoryPath: hlsDir.path(), indexFilename: nil, cacheAge: 0, allowRangeRequests: true)
+    proxyServer?["/:path"] = shareFilesFromDirectory(hlsDir.path())
     try? FileManager.default.createDirectory(atPath: hlsDir.path(), withIntermediateDirectories: true)
-    proxyServer?.start(withPort: 8080, bonjourName: nil)
+    try? proxyServer?.start(8080)
     //060f350f-9da8-422d-b14d-eb9642bea92a
-    url = URL(string: "wss://sfu-do-streaming.ermis.network/stream-gate/software/Ermis-streaming/\(NativeFmp4Player.streamId!)")!
+    url = URL(string: "wss://sfu-do-streaming.ermis.network/stream-gate/software/Ermis-streaming/\(NativeFmp4PlayerLib.streamId!)")!
     var request = URLRequest(url: url!)
     request.addValue("fmp4", forHTTPHeaderField: "Sec-WebSocket-Protocol")
     self.socketSession = URLSession(configuration: .default)
@@ -57,7 +57,7 @@ class NativeFmp4Player: NSObject {
     return data.count > 8 && String(data: data.subdata(in: 5..<9), encoding: .ascii) == "ftyp"
   }
   
-  func stopStreaming() {
+  public func stopStreaming() {
     socketTask?.cancel(with: .goingAway, reason: nil)
     endStream = true
   }
@@ -142,12 +142,12 @@ class NativeFmp4Player: NSObject {
       let playerItem = AVPlayerItem(asset: asset)
       playerItem.preferredForwardBufferDuration = 1.0
       playerItem.canUseNetworkResourcesForLiveStreamingWhilePaused = true
-      NativeFmp4Player.player = AVPlayer(playerItem: playerItem)
-      NativeFmp4Player.player?.automaticallyWaitsToMinimizeStalling = false
-     // Fmp4AVPlayerView.AttachPlayerToLayer(avplayer: NativeFmp4Player.player!)
+      NativeFmp4PlayerLib.player = AVPlayer(playerItem: playerItem)
+      NativeFmp4PlayerLib.player?.automaticallyWaitsToMinimizeStalling = false
+      Fmp4AVPlayerView.AttachPlayerToLayer(avplayer: NativeFmp4PlayerLib.player!)
       
       DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-        NativeFmp4Player.player?.play()
+        NativeFmp4PlayerLib.player?.play()
       }
     }
   
@@ -165,4 +165,3 @@ class NativeFmp4Player: NSObject {
   }
 
 }
-
