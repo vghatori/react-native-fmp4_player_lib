@@ -20,7 +20,7 @@ Pod::Spec.new do |s|
   s.pod_target_xcconfig = {
   'ENABLE_USER_SCRIPT_SANDBOXING' => 'NO'
   }
-  
+  s.vendored_frameworks = 'ios/MyLib.xcframework'
   
   install_modules_dependencies(s)
 end
