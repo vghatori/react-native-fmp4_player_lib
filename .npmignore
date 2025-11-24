@@ -1,4 +1,17 @@
-ios/
+# Exclude toàn bộ native code
 android/
-tests/
+ios/
+*.podspec
+*.gradle
+
+# Exclude files khác
+node_modules/
+.git/
+.github/
 example/
+__tests__/
+coverage/
+.vscode/
+.idea/
+*.test.js
+*.spec.js
