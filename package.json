@@ -1,6 +1,6 @@
 {
   "name": "react-native-fmp4_player_lib",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "description": "an player stream's fmp4",
   "private": true,
   "main": "./lib/module/index.js",
