@@ -64,8 +64,8 @@ public class NativeFmp4PlayerLib: NSObject {
   }
   
   static func attachId(Id : String) {
-//    self.url = URL(string: "wss://streaming.ermis.network/stream-rgate/software/Ermis-streaming/\(Id)")
-    self.url = URL(string: "wss://streaming.ermis.network/stream-gate/software/Ermis-streaming/060f350f-9da8-422d-b14d-eb9642bea92a")
+    //060f350f-9da8-422d-b14d-eb9642bea92a
+    self.url = URL(string: "wss://streaming.ermis.network/stream-gate/software/Ermis-streaming/\(Id)")
   }
   
   static func attachPlayer(videoplayer : AVSampleBufferDisplayLayer, audioplayers : AVSampleBufferAudioRenderer) {
