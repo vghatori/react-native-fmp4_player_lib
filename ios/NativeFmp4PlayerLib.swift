@@ -136,7 +136,7 @@ public class NativeFmp4PlayerLib: NSObject {
   private func decodeVideoFrame(_ data: Data, timestamp: CMTime) {
     
       guard let formatDesc = videoFormatDesc else {
-          print("❌ Video format not configured")
+          print("Video format not configured")
           return
       }
 
@@ -155,7 +155,7 @@ public class NativeFmp4PlayerLib: NSObject {
       )
 
       guard status == noErr, let blockBuffer = blockBuffer else {
-          print("❌ Failed to create video block buffer")
+          print("Failed to create video block buffer")
           return
       }
 
@@ -170,7 +170,7 @@ public class NativeFmp4PlayerLib: NSObject {
       }
 
       guard status == noErr else {
-          print("❌ Failed to copy video data")
+          print("Failed to copy video data")
           return
       }
 
@@ -195,7 +195,7 @@ public class NativeFmp4PlayerLib: NSObject {
       )
 
       guard status == noErr, let sampleBuffer = sampleBuffer else {
-          print("❌ Failed to create video sample buffer")
+          print("Failed to create video sample buffer")
           return
       }
 
@@ -207,17 +207,17 @@ public class NativeFmp4PlayerLib: NSObject {
           if !isPlaying {
               NativeFmp4PlayerLib.synchro.setRate(1.0, time: timestamp)
               isPlaying = true
-              print("▶️ Playback started")
+              print("Playback started")
           }
       } else {
-          print("⚠️ Video layer not ready")
+          print("Video layer not ready")
       }
   }
   
   private func decodeAudioFrame(_ data: Data, timestamp: CMTime) {
    
       guard let formatDesc = audioFormatDesc else {
-          print("❌ Audio format not configured")
+          print("Audio format not configured")
           return
       }
 
@@ -243,7 +243,7 @@ public class NativeFmp4PlayerLib: NSObject {
       )
 
       guard status == noErr, let blockBuffer = blockBuffer else {
-          print("❌ Failed to create audio block buffer")
+          print("Failed to create audio block buffer")
           return
       }
 
@@ -258,7 +258,7 @@ public class NativeFmp4PlayerLib: NSObject {
       }
 
       guard status == noErr else {
-          print("❌ Failed to copy audio data")
+          print("Failed to copy audio data")
           return
       }
 
@@ -292,7 +292,7 @@ public class NativeFmp4PlayerLib: NSObject {
       )
 
       guard status == noErr, let sampleBuffer = sampleBuffer else {
-          print("❌ Failed to create audio sample buffer: \(status)")
+          print("Failed to create audio sample buffer: \(status)")
           return
       }
     enqueueAudio(sampleBuffer)
